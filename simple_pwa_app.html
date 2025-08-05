@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Simple App</title>
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk15IFNpbXBsZSBBcHAiLAogICJzaG9ydF9uYW1lIjogIlNpbXBsZUFwcCIsCiAgImRlc2NyaXB0aW9uIjogIkEgc2ltcGxlIHByb2dyZXNzaXZlIHdlYiBhcHAiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzJkM2E0ZiIsCiAgInRoZW1lX2NvbG9yIjogIiM0Yjc2ODgiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlNVGt5SWlCb1pXbG5hSFE5SWpFNU1pSWdkbWxsZDBKdmVEMGlNQ0F3SURFNU1pQXhPVElpSUdacGJHdzlJaU0wWWpjMk9EZ2lQand2YzNablBnPT0iLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9LAogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU5URXlJaUJvWldsbmFIUTlJalV4TWlJZ2RtbGxkMEp2ZUQwaU1DQXdJRFV4TWlBMU1USWlJR1pwYkd3OUlpTTBZamMyT0RnaVBqd3ZjM1puUGc9PSIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            opacity: 0.8;
+            font-size: 16px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .counter-section {
+            text-align: center;
+        }
+
+        .counter-display {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 20px 0;
+            color: #fff;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 24px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .reset-btn {
+            background: rgba(255, 107, 107, 0.3);
+            border-color: rgba(255, 107, 107, 0.5);
+        }
+
+        .notes-section {
+            margin-top: 20px;
+        }
+
+        .notes-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .notes-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .install-prompt {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.4);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .install-btn {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: rgba(76, 175, 80, 0.5);
+            margin-top: 10px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            opacity: 0.9;
+        }
+
+        .feature-list li:before {
+            content: "✓ ";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .counter-display {
+                font-size: 36px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="app-icon">📱</div>
+            <h1>My Simple App</h1>
+            <p class="subtitle">A basic progressive web app</p>
+        </div>
+
+        <div class="install-prompt" id="installPrompt">
+            <p>Install this app on your device for the best experience!</p>
+            <button class="install-btn" id="installBtn">Install App</button>
+        </div>
+
+        <div class="card">
+            <div class="counter-section">
+                <h3>Counter</h3>
+                <div class="counter-display" id="counter">0</div>
+                <div class="button-group">
+                    <button onclick="decrementCounter()">- Decrease</button>
+                    <button onclick="incrementCounter()">+ Increase</button>
+                </div>
+                <button class="reset-btn" onclick="resetCounter()">Reset</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="notes-section">
+                <h3>Quick Notes</h3>
+                <textarea 
+                    class="notes-input" 
+                    id="notes" 
+                    placeholder="Write your notes here..."
+                    onchange="saveNotes()"
+                ></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>App Features</h3>
+            <ul class="feature-list">
+                <li>Works offline</li>
+                <li>Installable on any device</li>
+                <li>Data saved locally</li>
+                <li>Responsive design</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Counter functionality with error handling
+        let counter = 0;
+        
+        function initializeCounter() {
+            try {
+                const savedCounter = localStorage.getItem('counter');
+                counter = savedCounter ? parseInt(savedCounter, 10) : 0;
+                // Ensure counter is a valid number
+                if (isNaN(counter)) {
+                    counter = 0;
+                }
+                updateCounterDisplay();
+                console.log('Counter initialized:', counter);
+            } catch (error) {
+                console.error('Error initializing counter:', error);
+                counter = 0;
+                updateCounterDisplay();
+            }
+        }
+
+        function incrementCounter() {
+            counter++;
+            updateCounterDisplay();
+            saveCounter();
+        }
+
+        function decrementCounter() {
+            counter--;
+            updateCounterDisplay();
+            saveCounter();
+        }
+
+        function resetCounter() {
+            counter = 0;
+            updateCounterDisplay();
+            saveCounter();
+        }
+
+        function updateCounterDisplay() {
+            document.getElementById('counter').textContent = counter;
+        }
+
+        function saveCounter() {
+            try {
+                localStorage.setItem('counter', counter.toString());
+            } catch (error) {
+                console.error('Error saving counter:', error);
+            }
+        }
+
+        // Notes functionality with error handling
+        function saveNotes() {
+            try {
+                const notes = document.getElementById('notes').value;
+                localStorage.setItem('notes', notes);
+                console.log('Notes saved successfully');
+            } catch (error) {
+                console.error('Error saving notes:', error);
+            }
+        }
+
+        function loadNotes() {
+            try {
+                const savedNotes = localStorage.getItem('notes');
+                if (savedNotes) {
+                    document.getElementById('notes').value = savedNotes;
+                    console.log('Notes loaded successfully');
+                }
+            } catch (error) {
+                console.error('Error loading notes:', error);
+            }
+        }
+
+        // PWA Installation with error handling
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt event fired');
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPrompt').style.display = 'block';
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                try {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log('User choice:', outcome);
+                    if (outcome === 'accepted') {
+                        document.getElementById('installPrompt').style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                } catch (error) {
+                    console.error('Installation prompt error:', error);
+                }
+            } else {
+                console.log('No install prompt available');
+            }
+        });
+
+        // Check if app meets PWA criteria and force show install prompt for testing
+        window.addEventListener('load', () => {
+            // Always show install prompt for testing if not already installed
+            if (!window.matchMedia('(display-mode: standalone)').matches) {
+                setTimeout(() => {
+                    const installPrompt = document.getElementById('installPrompt');
+                    if (installPrompt && !deferredPrompt) {
+                        installPrompt.style.display = 'block';
+                        installPrompt.innerHTML = `
+                            <p>Install this app for the best experience!</p>
+                            <p><small>In Chrome: Click the install icon in the address bar, or use the menu → "Install app"</small></p>
+                            <button class="install-btn" onclick="this.parentElement.style.display='none'">Dismiss</button>
+                        `;
+                    }
+                }, 2000);
+            }
+        });
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    // Create service worker with proper error handling
+                    const swCode = `
+                        const CACHE_NAME = 'simple-app-v1';
+                        const urlsToCache = [
+                            './',
+                            '.',
+                            'index.html'
+                        ];
+
+                        self.addEventListener('install', (event) => {
+                            console.log('Service Worker installing...');
+                            self.skipWaiting(); // Force activate immediately
+                            event.waitUntil(
+                                caches.open(CACHE_NAME)
+                                    .then((cache) => {
+                                        console.log('Cache opened');
+                                        // Only cache the current page, don't fail on missing resources
+                                        return cache.add('./').catch((error) => {
+                                            console.log('Cache add failed, but continuing:', error);
+                                        });
+                                    })
+                                    .catch((error) => {
+                                        console.error('Cache open failed:', error);
+                                    })
+                            );
+                        });
+
+                        self.addEventListener('activate', (event) => {
+                            console.log('Service Worker activated');
+                            event.waitUntil(
+                                Promise.all([
+                                    self.clients.claim(), // Take control immediately
+                                    caches.keys().then((cacheNames) => {
+                                        return Promise.all(
+                                            cacheNames.map((cacheName) => {
+                                                if (cacheName !== CACHE_NAME) {
+                                                    console.log('Deleting old cache:', cacheName);
+                                                    return caches.delete(cacheName);
+                                                }
+                                            })
+                                        );
+                                    })
+                                ])
+                            );
+                        });
+
+                        self.addEventListener('fetch', (event) => {
+                            // Only handle GET requests for same origin
+                            if (event.request.method !== 'GET' || 
+                                !event.request.url.startsWith(self.location.origin)) {
+                                return;
+                            }
+                            
+                            // Skip chrome-extension, blob, and data URLs
+                            if (event.request.url.startsWith('chrome-extension://') || 
+                                event.request.url.startsWith('blob:') ||
+                                event.request.url.startsWith('data:')) {
+                                return;
+                            }
+
+                            event.respondWith(
+                                caches.match(event.request)
+                                    .then((response) => {
+                                        if (response) {
+                                            return response;
+                                        }
+                                        return fetch(event.request).catch(() => {
+                                            // Return a basic offline response for HTML requests
+                                            if (event.request.destination === 'document') {
+                                                return new Response('App is offline', {
+                                                    headers: { 'Content-Type': 'text/html' }
+                                                });
+                                            }
+                                        });
+                                    })
+                                    .catch((error) => {
+                                        console.error('Fetch error:', error);
+                                    })
+                            );
+                        });
+                    `;
+                    
+                    const blob = new Blob([swCode], { type: 'application/javascript' });
+                    const swUrl = URL.createObjectURL(blob);
+                    
+                    const registration = await navigator.serviceWorker.register(swUrl);
+                    console.log('SW registered successfully:', registration);
+                    
+                    // Clean up the blob URL after registration
+                    URL.revokeObjectURL(swUrl);
+                    
+                } catch (error) {
+                    console.error('SW registration failed:', error);
+                }
+            });
+        }
+
+        // Initialize app with error handling
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                initializeCounter();
+                loadNotes();
+                console.log('App initialized successfully');
+            } catch (error) {
+                console.error('Error initializing app:', error);
+            }
+        });
+
+        // Add some visual feedback for interactions
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                e.target.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    e.target.style.transform = '';
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
