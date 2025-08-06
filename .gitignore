@@ -1,3 +1,6 @@
 .env
 Local Notes.md
 Zapier Store Client README.md
+node_modules/
+test-results/
+playwright-report/
