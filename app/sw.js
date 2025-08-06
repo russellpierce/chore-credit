@@ -2,8 +2,7 @@ const CACHE_NAME = 'chore-credit-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/js/passphrase-utils.js',
-  '/zapier-store-client.min.js'
+  '/js/passphrase-utils.js'
 ];
 
 self.addEventListener('install', (event) => {
