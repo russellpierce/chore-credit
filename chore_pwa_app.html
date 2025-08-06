@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Configuration -->
+    <script>
+        const APP_CONFIG = {
+            children: ["Child A", "Child B"],
+            appName: "Chore Credit Tracker"
+        };
+    </script>
+
+    <!-- Load Zapier Store Client -->
+    <script src="zapier-store-client.min.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chore Credit Tracker</title>
+    <link rel="manifest"
+        href="data:application/json;base64,ewogICJuYW1lIjogIkNob3JlIENyZWRpdCBUcmFja2VyIiwKICAic2hvcnRfbmFtZSI6ICJDaG9yZUNyZWRpdCIsCiAgImRlc2NyaXB0aW9uIjogIlRyYWNrIGNyZWRpdHMgYW5kIGNob3JlcyBmb3IgdGhlIGZhbWlseSIsCiAgInN0YXJ0X3VybCI6ICIvIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMmQzYTRmIiwKICAidGhlbWVfY29sb3IiOiAiIzRiNzY4OCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1Ua3lJaUJvWldsbmFIUTlJakU1TWlJZ2RtbGxkMEp2ZUQwaU1DQXdJREU1TWlBeE9USWlJR1pwYkd3OUlpTTBZamMyT0RnaVBqd3ZjM1puUGc9PSIsCiAgICAgICJzaXplcyI6ICIxOTJ4MTkyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTlRFeUlpQm9aV2xuYUhROUlqVXhNaUlnZG1sc1pEQktkMFEwaU1DQXdJRFV4TWlBMU1USWlJR1pwYkd3OUlpTTBZamMyT0RnaVBqd3ZjM1puUGc9PSIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            opacity: 0.8;
+            font-size: 16px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .counter-section {
+            text-align: center;
+        }
+
+        .counter-display {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 20px 0;
+            color: #fff;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 24px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .reset-btn {
+            background: rgba(255, 107, 107, 0.3);
+            border-color: rgba(255, 107, 107, 0.5);
+        }
+
+        .notes-section {
+            margin-top: 20px;
+        }
+
+        .notes-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .notes-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .install-prompt {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.4);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .install-btn {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: rgba(76, 175, 80, 0.5);
+            margin-top: 10px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            opacity: 0.9;
+        }
+
+        .feature-list li:before {
+            content: "✓ ";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        /* Tab styles */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .tab.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Credit input styles */
+        .credit-input {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .amount-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px 15px;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            width: 80px;
+        }
+
+        .amount-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .submit-btn {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: rgba(76, 175, 80, 0.5);
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+
+        .submit-btn:hover {
+            background: rgba(76, 175, 80, 0.5);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Ledger styles */
+        .ledger {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .ledger-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+        }
+
+        .ledger-entry:last-child {
+            border-bottom: none;
+        }
+
+        .ledger-amount {
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .ledger-amount.positive {
+            color: #4CAF50;
+        }
+
+        .ledger-amount.negative {
+            color: #f44336;
+        }
+
+        .ledger-note {
+            flex: 1;
+            opacity: 0.9;
+        }
+
+        .ledger-timestamp {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* Management styles */
+        .management-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .manage-btn {
+            background: rgba(255, 193, 7, 0.3);
+            border-color: rgba(255, 193, 7, 0.5);
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .manage-btn:hover {
+            background: rgba(255, 193, 7, 0.5);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .child-list {
+            margin: 20px 0;
+        }
+
+        .child-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .delete-child-btn {
+            background: rgba(255, 107, 107, 0.3);
+            border-color: rgba(255, 107, 107, 0.5);
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .add-child-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .child-name-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .child-name-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .add-child-btn {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: rgba(76, 175, 80, 0.5);
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        .ledger-note-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            font-size: 14px;
+            margin: 10px 0;
+            resize: none;
+            height: 60px;
+        }
+
+        .ledger-note-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Secret prompt styles */
+        .secret-prompt {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .secret-prompt-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 20% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .secret-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: monospace;
+        }
+
+        .secret-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .secret-submit-btn {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: rgba(76, 175, 80, 0.5);
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .secret-submit-btn:hover {
+            background: rgba(76, 175, 80, 0.5);
+        }
+
+        .secret-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .uuid-display {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+            color: #4CAF50;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .counter-display {
+                font-size: 36px;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="app-icon">⭐</div>
+            <h1>Chore Credit Tracker</h1>
+            <p class="subtitle">Track credits and chores for the family</p>
+        </div>
+
+        <div class="install-prompt" id="installPrompt">
+            <p>Install this app on your device for the best experience!</p>
+            <button class="install-btn" id="installBtn">Install App</button>
+        </div>
+
+        <!-- Management Section -->
+        <div class="management-section">
+            <button class="manage-btn" onclick="openManageModal()">Manage Children</button>
+            <button class="manage-btn" onclick="changeZapierSecret()" style="margin-left: 10px;">Change Zapier
+                Secret</button>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tabs" id="tabNavigation">
+            <!-- Tabs will be dynamically generated -->
+        </div>
+
+        <!-- Tab Content -->
+        <div id="tabContent">
+            <!-- Content will be dynamically generated for each child -->
+        </div>
+
+        <div class="card">
+            <h3>App Features</h3>
+            <ul class="feature-list">
+                <li>Track credits per child</li>
+                <li>Add/subtract credit amounts</li>
+                <li>Timestamped transaction ledger</li>
+                <li>Child management</li>
+                <li>Data synced via Zapier Store</li>
+                <li>Works offline</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Zapier Secret Prompt Modal -->
+    <div id="secretPrompt" class="secret-prompt">
+        <div class="secret-prompt-content">
+            <h2>🔐 Zapier Store Setup</h2>
+            <p>This app uses Zapier Store for data persistence. You need to provide your Zapier Store secret to
+                continue.</p>
+
+            <div class="secret-info">
+                <strong>Your passphrase is converted to a UUID secret for securing your data for use with Storage by
+                    Zapier (store.zapier.com).</strong><br>
+                <em>Note: Use the same passphrase to access the same store.</em>
+            </div>
+
+            <input type="text" id="zapierSecretInput" class="secret-input" placeholder="Enter a memorable passphrase"
+                maxlength="100">
+
+            <div id="uuidDisplay" class="uuid-display" style="display: none;">
+                <strong>For reference, your current UUID is:</strong><br>
+                <span id="generatedUUID"></span>
+            </div>
+
+            <button class="secret-submit-btn" onclick="submitZapierSecret()">Continue</button>
+        </div>
+    </div>
+
+    <!-- Child Management Modal -->
+    <div id="manageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeManageModal()">&times;</span>
+            <h2>Manage Children</h2>
+
+            <div class="child-list" id="childList">
+                <!-- Children will be listed here -->
+            </div>
+
+            <div class="add-child-form">
+                <input type="text" id="newChildName" class="child-name-input" placeholder="Enter child name..."
+                    maxlength="25">
+                <button class="add-child-btn" onclick="addChild()">Add Child</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App state
+        let currentChildren = [...APP_CONFIG.children];
+        let currentChild = currentChildren[0] || null;
+        let childData = {};
+        let storeClient;
+        let zapierSecret;
+
+        // Check for stored Zapier secret and show prompt if needed
+        function checkZapierSecret() {
+            const storedSecret = localStorage.getItem('zapierSecret');
+            if (storedSecret) {
+                zapierSecret = storedSecret;
+                console.log('Using stored Zapier secret');
+                return true;
+            } else {
+                showSecretPrompt();
+                return false;
+            }
+        }
+
+        // Show the secret prompt modal
+        function showSecretPrompt() {
+            document.getElementById('secretPrompt').style.display = 'block';
+        }
+
+        // Hide the secret prompt modal
+        function hideSecretPrompt() {
+            document.getElementById('secretPrompt').style.display = 'none';
+        }
+
+        // Update UUID display in real-time
+        async function updateUUIDDisplay() {
+            const secretInput = document.getElementById('zapierSecretInput');
+            const uuidDisplay = document.getElementById('uuidDisplay');
+            const generatedUUID = document.getElementById('generatedUUID');
+
+            const passphrase = secretInput.value.trim();
+
+            if (passphrase.length > 0) {
+                try {
+                    const uuid = await generateUUIDFromPassphrase(passphrase);
+                    generatedUUID.textContent = uuid;
+                    uuidDisplay.style.display = 'block';
+                } catch (error) {
+                    console.error('Error generating UUID:', error);
+                    uuidDisplay.style.display = 'none';
+                }
+            } else {
+                uuidDisplay.style.display = 'none';
+            }
+        }
+
+        // Generate UUID from SHA-256 hash
+        async function generateUUIDFromPassphrase(passphrase) {
+            // Convert passphrase to SHA-256 hash
+            const encoder = new TextEncoder();
+            const data = encoder.encode(passphrase);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+
+            // Convert hash to hex string
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            // Take the first 32 characters and format as UUID
+            const uuidHex = hashHex.substring(0, 32);
+
+            // Format as UUID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+            return `${uuidHex.substring(0, 8)}-${uuidHex.substring(8, 12)}-${uuidHex.substring(12, 16)}-${uuidHex.substring(16, 20)}-${uuidHex.substring(20, 32)}`;
+        }
+
+        // Submit Zapier secret
+        async function submitZapierSecret() {
+            const secretInput = document.getElementById('zapierSecretInput');
+            const passphrase = secretInput.value.trim();
+
+            if (!passphrase) {
+                alert('Please enter a passphrase');
+                return;
+            }
+
+            try {
+                // Generate UUID from passphrase
+                const secret = await generateUUIDFromPassphrase(passphrase);
+                console.log('Generated UUID from passphrase:', secret);
+
+                // Test the secret by creating a client
+                const testClient = ZapierStoreClient.createZapierStoreClient(secret);
+                console.log('Zapier secret validated successfully');
+
+                // Store the secret
+                localStorage.setItem('zapierSecret', secret);
+                zapierSecret = secret;
+
+                // Hide prompt and initialize app
+                hideSecretPrompt();
+                initializeApp();
+            } catch (error) {
+                console.error('Error with Zapier secret:', error);
+                alert('Error generating or validating Zapier Store secret. Please try again.');
+            }
+        }
+
+        // Change Zapier secret
+        function changeZapierSecret() {
+            if (confirm('This will change your Zapier Store connection. Your current data will remain in the old store. Continue?')) {
+                // Clear the stored secret
+                localStorage.removeItem('zapierSecret');
+                zapierSecret = null;
+                storeClient = null;
+
+                // Show the secret prompt
+                showSecretPrompt();
+
+                // Clear the input field and hide UUID display
+                document.getElementById('zapierSecretInput').value = '';
+                document.getElementById('uuidDisplay').style.display = 'none';
+            }
+        }
+
+        // Handle Enter key in secret input and real-time UUID generation
+        document.addEventListener('DOMContentLoaded', function () {
+            const secretInput = document.getElementById('zapierSecretInput');
+            if (secretInput) {
+                // Handle Enter key
+                secretInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        submitZapierSecret();
+                    }
+                });
+
+                // Handle real-time UUID generation
+                secretInput.addEventListener('input', function () {
+                    updateUUIDDisplay();
+                });
+            }
+        });
+
+        // Initialize Zapier Store Client
+        function initializeStoreClient() {
+            try {
+                if (!zapierSecret) {
+                    throw new Error('No Zapier secret available');
+                }
+                storeClient = ZapierStoreClient.createZapierStoreClient(zapierSecret);
+                console.log('Zapier Store Client initialized');
+                return true;
+            } catch (error) {
+                console.error('Error initializing Zapier Store Client:', error);
+                return false;
+            }
+        }
+
+        // Initialize child data structure
+        async function initializeChildData() {
+            try {
+                if (!storeClient && !initializeStoreClient()) {
+                    throw new Error('Failed to initialize store client');
+                }
+
+                // Get current children list from store
+                const storedChildren = await storeClient.get('children');
+                if (storedChildren && Array.isArray(storedChildren) && storedChildren.length > 0) {
+                    currentChildren = storedChildren;
+                    console.log('Loaded children from store:', currentChildren);
+                } else {
+                    // Initialize with config children
+                    currentChildren = [...APP_CONFIG.children];
+                    await storeClient.set('children', currentChildren);
+                    console.log('Children list initialized:', currentChildren);
+                }
+
+                // Set current child if we don't have one
+                if (!currentChild && currentChildren.length > 0) {
+                    currentChild = currentChildren[0];
+                }
+
+                // Initialize local childData from remote store
+                childData = {};
+                for (const child of currentChildren) {
+                    // Get balance (will be 0 if doesn't exist)
+                    const balance = await storeClient.get(`${child}:balance`) || 0;
+
+                    childData[child] = {
+                        credits: balance,
+                        ledger: []
+                    };
+
+                    // Initialize balance to 0 if it doesn't exist
+                    if (await storeClient.get(`${child}:balance`) === null) {
+                        await storeClient.set(`${child}:balance`, 0);
+                    }
+
+                    // Load and clean ledger
+                    await loadAndCleanLedger(child);
+                }
+
+                console.log('Child data initialized:', childData);
+            } catch (error) {
+                console.error('Error initializing child data:', error);
+                // Fallback to local data
+                childData = {};
+                currentChildren.forEach(child => {
+                    childData[child] = { credits: 0, ledger: [] };
+                });
+            }
+        }
+
+        // Load ledger and clean old entries (older than 14 days)
+        async function loadAndCleanLedger(childName) {
+            try {
+                const ledgerData = await storeClient.get(`${childName}:ledger`) || [];
+                const fourteenDaysAgo = Date.now() - (14 * 24 * 60 * 60 * 1000);
+
+                // Filter out entries older than 14 days
+                const cleanLedger = ledgerData.filter(entry => {
+                    return entry.timestamp && entry.timestamp > fourteenDaysAgo;
+                });
+
+                // Update store if we removed old entries
+                if (cleanLedger.length !== ledgerData.length) {
+                    await storeClient.set(`${childName}:ledger`, cleanLedger);
+                    console.log(`Cleaned ${ledgerData.length - cleanLedger.length} old entries for ${childName}`);
+                }
+
+                childData[childName].ledger = cleanLedger;
+            } catch (error) {
+                console.error(`Error loading ledger for ${childName}:`, error);
+                childData[childName].ledger = [];
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            const modal = document.getElementById('manageModal');
+            if (event.target === modal) {
+                closeManageModal();
+            }
+        }
+
+        // Save data is now handled per operation, no need for bulk save
+
+        // Generate tabs
+        function generateTabs() {
+            const tabNavigation = document.getElementById('tabNavigation');
+            tabNavigation.innerHTML = '';
+
+            if (currentChildren.length === 0) {
+                tabNavigation.innerHTML = '<p style="text-align: center; opacity: 0.7;">No children added yet</p>';
+                return;
+            }
+
+            currentChildren.forEach((child, index) => {
+                const tab = document.createElement('button');
+                tab.className = `tab ${child === currentChild ? 'active' : ''}`;
+                tab.textContent = child;
+                tab.onclick = () => switchTab(child);
+                tabNavigation.appendChild(tab);
+            });
+        }
+
+        // Generate tab content
+        function generateTabContent() {
+            const tabContent = document.getElementById('tabContent');
+            tabContent.innerHTML = '';
+
+            if (currentChildren.length === 0) {
+                tabContent.innerHTML = '<div class="card"><p style="text-align: center;">Add children using the "Manage Children" button above.</p></div>';
+                return;
+            }
+
+            currentChildren.forEach((child, index) => {
+                const content = document.createElement('div');
+                content.className = `tab-content ${child === currentChild ? 'active' : ''}`;
+                content.id = `content-${child}`;
+
+                content.innerHTML = `
+                    <div class="card">
+                        <div class="counter-section">
+                            <h3>${child}'s Credits</h3>
+                            <div class="counter-display" id="credits-${child}">0</div>
+
+                            <div class="credit-input">
+                                <button onclick="changeCredits('${child}', -1)">-</button>
+                                <input type="number"
+                                       class="amount-input"
+                                       id="amount-${child}"
+                                       placeholder="0"
+                                       value="0">
+                                <button onclick="changeCredits('${child}', 1)">+</button>
+                            </div>
+
+                            <textarea
+                                class="ledger-note-input"
+                                id="note-${child}"
+                                placeholder="Add a note for this transaction..."
+                            ></textarea>
+
+                            <button class="submit-btn" onclick="submitCreditChange('${child}')">Submit</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="notes-section">
+                            <h3>Transaction History</h3>
+                            <div class="ledger" id="ledger-${child}">
+                                <!-- Ledger entries will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                tabContent.appendChild(content);
+            });
+        }
+
+        // Switch between tabs
+        function switchTab(childName) {
+            currentChild = childName;
+
+            // Update tab appearance
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.textContent === childName) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Update content visibility
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`content-${childName}`).classList.add('active');
+        }
+
+        // Change credits by amount (for +/- buttons)
+        function changeCredits(childName, direction) {
+            const amountInput = document.getElementById(`amount-${childName}`);
+            let currentAmount = parseInt(amountInput.value) || 0;
+            currentAmount += direction;
+            amountInput.value = Math.max(0, currentAmount);
+        }
+
+        // Submit credit change
+        async function submitCreditChange(childName) {
+            const amountInput = document.getElementById(`amount-${childName}`);
+            const noteInput = document.getElementById(`note-${childName}`);
+            const amount = parseInt(amountInput.value) || 0;
+            const note = noteInput.value.trim();
+
+            if (amount !== 0) {
+                try {
+                    // Use Zapier Store's incrBy to update the balance
+                    const newBalance = await storeClient.incrBy(`${childName}:balance`, amount);
+
+                    // Create ledger entry
+                    const ledgerEntry = {
+                        amount: amount,
+                        note: note || 'No note provided',
+                        timestamp: Date.now(),
+                        balance: newBalance
+                    };
+
+                    // Add to ledger using list operations
+                    await storeClient.lpush(`${childName}:ledger`, ledgerEntry);
+
+                    // Update local cache
+                    childData[childName].credits = newBalance;
+                    childData[childName].ledger.unshift(ledgerEntry);
+
+                    // Update displays
+                    updateCreditDisplay(childName);
+                    updateLedgerDisplay(childName);
+
+                    // Reset inputs
+                    amountInput.value = 0;
+                    noteInput.value = '';
+
+                    console.log(`Added ${amount} credits to ${childName}, new balance: ${newBalance}`);
+                } catch (error) {
+                    console.error(`Error updating credits for ${childName}:`, error);
+                    // Fallback to local update
+                    childData[childName].credits += amount;
+                    updateCreditDisplay(childName);
+                    amountInput.value = 0;
+                    noteInput.value = '';
+                }
+            }
+        }
+
+        // Update credit display
+        function updateCreditDisplay(childName) {
+            const display = document.getElementById(`credits-${childName}`);
+            if (display) {
+                display.textContent = childData[childName].credits;
+            }
+        }
+
+        // Update ledger display
+        function updateLedgerDisplay(childName) {
+            const ledgerContainer = document.getElementById(`ledger-${childName}`);
+            if (!ledgerContainer) return;
+
+            const ledger = childData[childName].ledger || [];
+
+            if (ledger.length === 0) {
+                ledgerContainer.innerHTML = '<p style="text-align: center; opacity: 0.7;">No transactions yet</p>';
+                return;
+            }
+
+            ledgerContainer.innerHTML = ledger.map(entry => {
+                const date = new Date(entry.timestamp);
+                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const amountClass = entry.amount > 0 ? 'positive' : 'negative';
+                const amountSign = entry.amount > 0 ? '+' : '';
+
+                return `
+                    <div class="ledger-entry">
+                        <span class="ledger-amount ${amountClass}">${amountSign}${entry.amount}</span>
+                        <span class="ledger-note">${entry.note}</span>
+                        <span class="ledger-timestamp">${formattedDate}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update all displays
+        async function updateAllDisplays() {
+            for (const child of currentChildren) {
+                updateCreditDisplay(child);
+                updateLedgerDisplay(child);
+            }
+        }
+
+        // Child Management Functions
+        function openManageModal() {
+            document.getElementById('manageModal').style.display = 'block';
+            updateChildList();
+        }
+
+        function closeManageModal() {
+            document.getElementById('manageModal').style.display = 'none';
+        }
+
+        function updateChildList() {
+            const childList = document.getElementById('childList');
+            childList.innerHTML = '';
+
+            currentChildren.forEach(child => {
+                const childItem = document.createElement('div');
+                childItem.className = 'child-item';
+                childItem.innerHTML = `
+                    <span>${child}</span>
+                    <button class="delete-child-btn" onclick="deleteChild('${child}')">Delete</button>
+                `;
+                childList.appendChild(childItem);
+            });
+        }
+
+        async function addChild() {
+            const nameInput = document.getElementById('newChildName');
+            const childName = nameInput.value.trim();
+
+            if (!childName) {
+                alert('Please enter a child name');
+                return;
+            }
+
+            if (currentChildren.includes(childName)) {
+                alert('A child with that name already exists');
+                return;
+            }
+
+            try {
+                // Add to children list
+                currentChildren.push(childName);
+                await storeClient.set('children', currentChildren);
+
+                // Initialize child data
+                childData[childName] = {
+                    credits: 0,
+                    ledger: []
+                };
+
+                // Initialize balance and ledger in store
+                await storeClient.set(`${childName}:balance`, 0);
+                await storeClient.set(`${childName}:ledger`, []);
+
+                // Update UI
+                updateChildList();
+                generateTabs();
+                generateTabContent();
+                await updateAllDisplays();
+
+                // Clear input
+                nameInput.value = '';
+
+                console.log(`Added child: ${childName}`);
+            } catch (error) {
+                console.error('Error adding child:', error);
+                alert('Error adding child. Please try again.');
+            }
+        }
+
+        async function deleteChild(childName) {
+            if (!confirm(`Are you sure you want to delete ${childName}? This will remove all their data permanently.`)) {
+                return;
+            }
+
+            try {
+                // Remove from children list
+                currentChildren = currentChildren.filter(child => child !== childName);
+                await storeClient.set('children', currentChildren);
+
+                // Delete child data from store
+                await storeClient.del(`${childName}:balance`);
+                await storeClient.del(`${childName}:ledger`);
+
+                // Remove from local data
+                delete childData[childName];
+
+                // Update current child if needed
+                if (currentChild === childName) {
+                    currentChild = currentChildren.length > 0 ? currentChildren[0] : null;
+                }
+
+                // Update UI
+                updateChildList();
+                generateTabs();
+                generateTabContent();
+                await updateAllDisplays();
+
+                console.log(`Deleted child: ${childName}`);
+            } catch (error) {
+                console.error('Error deleting child:', error);
+                alert('Error deleting child. Please try again.');
+            }
+        }
+
+        // Clear all data (optional function for development/testing)
+        async function clearAllData() {
+            try {
+                await storeClient.clear();
+                console.log('All data cleared from Zapier Store');
+
+                // Reset local data
+                childData = {};
+                currentChildren = [...APP_CONFIG.children];
+                currentChild = currentChildren[0] || null;
+
+                // Reinitialize
+                await initializeChildData();
+                await updateAllDisplays();
+            } catch (error) {
+                console.error('Error clearing data:', error);
+            }
+        }
+
+        // PWA Installation with error handling
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt event fired');
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPrompt').style.display = 'block';
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                try {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log('User choice:', outcome);
+                    if (outcome === 'accepted') {
+                        document.getElementById('installPrompt').style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                } catch (error) {
+                    console.error('Installation prompt error:', error);
+                }
+            } else {
+                console.log('No install prompt available');
+            }
+        });
+
+        // Check if app meets PWA criteria and force show install prompt for testing
+        window.addEventListener('load', () => {
+            // Always show install prompt for testing if not already installed
+            if (!window.matchMedia('(display-mode: standalone)').matches) {
+                setTimeout(() => {
+                    const installPrompt = document.getElementById('installPrompt');
+                    if (installPrompt && !deferredPrompt) {
+                        installPrompt.style.display = 'block';
+                        installPrompt.innerHTML = `
+                            <p>Install this app for the best experience!</p>
+                            <p><small>In Chrome: Click the install icon in the address bar, or use the menu → "Install app"</small></p>
+                            <button class="install-btn" onclick="this.parentElement.style.display='none'">Dismiss</button>
+                        `;
+                    }
+                }, 2000);
+            }
+        });
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    // Create service worker with proper error handling
+                    const swCode = `
+                        const CACHE_NAME = 'chore-credit-v1';
+                        const urlsToCache = [
+                            './',
+                            '.',
+                            'chore_pwa_app.html'
+                        ];
+
+                        self.addEventListener('install', (event) => {
+                            console.log('Service Worker installing...');
+                            self.skipWaiting(); // Force activate immediately
+                            event.waitUntil(
+                                caches.open(CACHE_NAME)
+                                    .then((cache) => {
+                                        console.log('Cache opened');
+                                        // Only cache the current page, don't fail on missing resources
+                                        return cache.add('./').catch((error) => {
+                                            console.log('Cache add failed, but continuing:', error);
+                                        });
+                                    })
+                                    .catch((error) => {
+                                        console.error('Cache open failed:', error);
+                                    })
+                            );
+                        });
+
+                        self.addEventListener('activate', (event) => {
+                            console.log('Service Worker activated');
+                            event.waitUntil(
+                                Promise.all([
+                                    self.clients.claim(), // Take control immediately
+                                    caches.keys().then((cacheNames) => {
+                                        return Promise.all(
+                                            cacheNames.map((cacheName) => {
+                                                if (cacheName !== CACHE_NAME) {
+                                                    console.log('Deleting old cache:', cacheName);
+                                                    return caches.delete(cacheName);
+                                                }
+                                            })
+                                        );
+                                    })
+                                ])
+                            );
+                        });
+
+                        self.addEventListener('fetch', (event) => {
+                            // Only handle GET requests for same origin
+                            if (event.request.method !== 'GET' ||
+                                !event.request.url.startsWith(self.location.origin)) {
+                                return;
+                            }
+
+                            // Skip chrome-extension, blob, and data URLs
+                            if (event.request.url.startsWith('chrome-extension://') ||
+                                event.request.url.startsWith('blob:') ||
+                                event.request.url.startsWith('data:')) {
+                                return;
+                            }
+
+                            event.respondWith(
+                                caches.match(event.request)
+                                    .then((response) => {
+                                        if (response) {
+                                            return response;
+                                        }
+                                        return fetch(event.request).catch(() => {
+                                            // Return a basic offline response for HTML requests
+                                            if (event.request.destination === 'document') {
+                                                return new Response('App is offline', {
+                                                    headers: { 'Content-Type': 'text/html' }
+                                                });
+                                            }
+                                        });
+                                    })
+                                    .catch((error) => {
+                                        console.error('Fetch error:', error);
+                                    })
+                            );
+                        });
+                    `;
+
+                    const blob = new Blob([swCode], { type: 'application/javascript' });
+                    const swUrl = URL.createObjectURL(blob);
+
+                    const registration = await navigator.serviceWorker.register(swUrl);
+                    console.log('SW registered successfully:', registration);
+
+                    // Clean up the blob URL after registration
+                    URL.revokeObjectURL(swUrl);
+
+                } catch (error) {
+                    console.error('SW registration failed:', error);
+                }
+            });
+        }
+
+        // Main app initialization
+        async function initializeApp() {
+            try {
+                await initializeChildData();
+                generateTabs();
+                generateTabContent();
+                await updateAllDisplays();
+                console.log('Chore Credit Tracker initialized successfully');
+            } catch (error) {
+                console.error('Error initializing app:', error);
+            }
+        }
+
+        // Initialize app with error handling
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check for Zapier secret first
+            if (checkZapierSecret()) {
+                // Secret is available, initialize app
+                await initializeApp();
+            }
+            // If no secret, the prompt will be shown and app will initialize when secret is provided
+        });
+
+        // Add some visual feedback for interactions
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                e.target.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    e.target.style.transform = '';
+                }, 100);
+            }
+        });
+    </script>
+</body>
+
+</html>
