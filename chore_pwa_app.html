@@ -22,8 +22,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chore Credit Tracker</title>
-    <link rel="manifest"
-        href="data:application/json;base64,ewogICJuYW1lIjogIkNob3JlIENyZWRpdCBUcmFja2VyIiwKICAic2hvcnRfbmFtZSI6ICJDaG9yZUNyZWRpdCIsCiAgImRlc2NyaXB0aW9uIjogIlRyYWNrIGNyZWRpdHMgYW5kIGNob3JlcyBmb3IgdGhlIGZhbWlseSIsCiAgInN0YXJ0X3VybCI6ICIvIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMmQzYTRmIiwKICAidGhlbWVfY29sb3IiOiAiIzRiNzY4OCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1Ua3lJaUJvWldsbmFIUTlJakU1TWlJZ2RtbGxkMEp2ZUQwaU1DQXdJREU1TWlBeE9USWlJR1pwYkd3OUlpTTBZamMyT0RnaVBqd3ZjM1puUGc9PSIsCiAgICAgICJzaXplcyI6ICIxOTJ4MTkyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTlRFeUlpQm9aV2xuYUhROUlqVXhNaUlnZG1sc1pEQktkMFEwaU1DQXdJRFV4TWlBMU1USWlJR1pwYkd3OUlpTTBZamMyT0RnaVBqd3ZjM1puUGc9PSIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
+    <link rel="manifest" href="/manifest.json">
 
     <style>
         * {
@@ -1240,97 +1239,8 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', async () => {
                 try {
-                    // Create service worker with proper error handling
-                    const swCode = `
-                        const CACHE_NAME = 'chore-credit-v1';
-                        const urlsToCache = [
-                            './',
-                            '.',
-                            'chore_pwa_app.html'
-                        ];
-
-                        self.addEventListener('install', (event) => {
-                            console.log('Service Worker installing...');
-                            self.skipWaiting(); // Force activate immediately
-                            event.waitUntil(
-                                caches.open(CACHE_NAME)
-                                    .then((cache) => {
-                                        console.log('Cache opened');
-                                        // Only cache the current page, don't fail on missing resources
-                                        return cache.add('./').catch((error) => {
-                                            console.log('Cache add failed, but continuing:', error);
-                                        });
-                                    })
-                                    .catch((error) => {
-                                        console.error('Cache open failed:', error);
-                                    })
-                            );
-                        });
-
-                        self.addEventListener('activate', (event) => {
-                            console.log('Service Worker activated');
-                            event.waitUntil(
-                                Promise.all([
-                                    self.clients.claim(), // Take control immediately
-                                    caches.keys().then((cacheNames) => {
-                                        return Promise.all(
-                                            cacheNames.map((cacheName) => {
-                                                if (cacheName !== CACHE_NAME) {
-                                                    console.log('Deleting old cache:', cacheName);
-                                                    return caches.delete(cacheName);
-                                                }
-                                            })
-                                        );
-                                    })
-                                ])
-                            );
-                        });
-
-                        self.addEventListener('fetch', (event) => {
-                            // Only handle GET requests for same origin
-                            if (event.request.method !== 'GET' ||
-                                !event.request.url.startsWith(self.location.origin)) {
-                                return;
-                            }
-
-                            // Skip chrome-extension, blob, and data URLs
-                            if (event.request.url.startsWith('chrome-extension://') ||
-                                event.request.url.startsWith('blob:') ||
-                                event.request.url.startsWith('data:')) {
-                                return;
-                            }
-
-                            event.respondWith(
-                                caches.match(event.request)
-                                    .then((response) => {
-                                        if (response) {
-                                            return response;
-                                        }
-                                        return fetch(event.request).catch(() => {
-                                            // Return a basic offline response for HTML requests
-                                            if (event.request.destination === 'document') {
-                                                return new Response('App is offline', {
-                                                    headers: { 'Content-Type': 'text/html' }
-                                                });
-                                            }
-                                        });
-                                    })
-                                    .catch((error) => {
-                                        console.error('Fetch error:', error);
-                                    })
-                            );
-                        });
-                    `;
-
-                    const blob = new Blob([swCode], { type: 'application/javascript' });
-                    const swUrl = URL.createObjectURL(blob);
-
-                    const registration = await navigator.serviceWorker.register(swUrl);
+                    const registration = await navigator.serviceWorker.register('/sw.js');
                     console.log('SW registered successfully:', registration);
-
-                    // Clean up the blob URL after registration
-                    URL.revokeObjectURL(swUrl);
-
                 } catch (error) {
                     console.error('SW registration failed:', error);
                 }
