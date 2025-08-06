@@ -12,6 +12,7 @@
 
     <!-- Load Zapier Store Client -->
     <script src="zapier-store-client.min.js"></script>
+    <script src="js/passphrase-utils.js"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -469,6 +470,17 @@
             background: rgba(76, 175, 80, 0.5);
         }
 
+        .secret-submit-btn:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .secret-submit-btn:disabled:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .secret-info {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -573,7 +585,7 @@
                 <span id="generatedUUID"></span>
             </div>
 
-            <button class="secret-submit-btn" onclick="submitZapierSecret()">Continue</button>
+            <button id="continueBtn" class="secret-submit-btn" onclick="submitZapierSecret()">Continue</button>
         </div>
     </div>
 
@@ -619,6 +631,11 @@
         // Show the secret prompt modal
         function showSecretPrompt() {
             document.getElementById('secretPrompt').style.display = 'block';
+
+            // Ensure Continue button starts disabled
+            const continueBtn = document.getElementById('continueBtn');
+            continueBtn.disabled = true;
+            continueBtn.style.opacity = '0.5';
         }
 
         // Hide the secret prompt modal
@@ -631,6 +648,7 @@
             const secretInput = document.getElementById('zapierSecretInput');
             const uuidDisplay = document.getElementById('uuidDisplay');
             const generatedUUID = document.getElementById('generatedUUID');
+            const continueBtn = document.getElementById('continueBtn');
 
             const passphrase = secretInput.value.trim();
 
@@ -639,20 +657,29 @@
                     const uuid = await generateUUIDFromPassphrase(passphrase);
                     generatedUUID.textContent = uuid;
                     uuidDisplay.style.display = 'block';
+                    continueBtn.disabled = false;
+                    continueBtn.style.opacity = '1';
                 } catch (error) {
                     console.error('Error generating UUID:', error);
                     uuidDisplay.style.display = 'none';
+                    continueBtn.disabled = true;
+                    continueBtn.style.opacity = '0.5';
                 }
             } else {
                 uuidDisplay.style.display = 'none';
+                continueBtn.disabled = true;
+                continueBtn.style.opacity = '0.5';
             }
         }
 
         // Generate UUID from SHA-256 hash
         async function generateUUIDFromPassphrase(passphrase) {
+            // Clean the passphrase for consistency
+            const cleanedPassphrase = cleanPassphrase(passphrase);
+
             // Convert passphrase to SHA-256 hash
             const encoder = new TextEncoder();
-            const data = encoder.encode(passphrase);
+            const data = encoder.encode(cleanedPassphrase);
             const hashBuffer = await crypto.subtle.digest('SHA-256', data);
 
             // Convert hash to hex string
@@ -712,6 +739,11 @@
                 // Clear the input field and hide UUID display
                 document.getElementById('zapierSecretInput').value = '';
                 document.getElementById('uuidDisplay').style.display = 'none';
+
+                // Reset Continue button state
+                const continueBtn = document.getElementById('continueBtn');
+                continueBtn.disabled = true;
+                continueBtn.style.opacity = '0.5';
             }
         }
 
