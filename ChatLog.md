@@ -17,3 +17,4 @@
 **User:** LOG: Add an item to CT, Storage by Zapier reports the UUID we're sending is invalid. Is it possible we're sending something wrong? Double check the substring logic and anything else that sounds out as possibly wrong. Then move that task to inprogress and work the problem:
 **User:** LOG: Hold up. The upstream packager for zapier-store-client agreed to make their UUID validation not concern itself with being an actual UUID.
 **User:** Disk space issue resolved.
+**User:** Let's leave this playright stuff in progress but put a pin in it. Set it off into an appropriately named Jira branch, commit there, then come back to main as of the version at origin right now.

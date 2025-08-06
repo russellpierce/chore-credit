@@ -1,0 +1,31 @@
+{
+  "name": "chore-credit",
+  "version": "1.0.0",
+  "description": "⚠️ Almost Entirely 'Vibe Coded' with Cursor ⚠️",
+  "main": "test_uuid_consistency.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/russellpierce/chore-credit.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/russellpierce/chore-credit/issues"
+  },
+  "homepage": "https://github.com/russellpierce/chore-credit#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
+  }
+}
