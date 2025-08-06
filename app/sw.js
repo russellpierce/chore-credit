@@ -1,7 +1,7 @@
 const CACHE_NAME = 'chore-credit-v1';
 const urlsToCache = [
   '/',
-  '/chore_pwa_app.html',
+  '/index.html',
   '/js/passphrase-utils.js',
   '/zapier-store-client.min.js'
 ];
